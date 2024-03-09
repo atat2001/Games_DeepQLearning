@@ -5,7 +5,7 @@ from multiprocessing import Pool
 
 
 # Constants
-PROCESSES = 1
+PROCESSES = 1  # used for threads but didnt work out 
 SIZE = 3
 WIDTH, HEIGHT = 1200, 1200
 POINT_RADIUS = 20
@@ -18,7 +18,6 @@ HEIGHT_UNIT = (HEIGHT/(SQUARE+2))
 
 # Main function
 def main():
-    pool = Pool(processes=PROCESSES) 
     game = Game(SIZE, Player("player1"), Player("player2"))
 
     trainers = []

@@ -303,35 +303,7 @@ def main():
             iterations += -1
             canvas = Canvas(canvas.surface,get_points(game), 0, 0, [], [], pygame.font.Font(None, 36), pygame.time.Clock(), trainer.game)
 
-        """
-        for event in pygame.event.get():
-            
-            
-            if event.type == pygame.QUIT:
-                running = False
-            elif event.type == pygame.MOUSEBUTTONDOWN:
-                if event.button == 1:  # Left mouse button
-                    if canvas.selected != 0:
-                        canvas.last_selected = canvas.selected
-                        canvas.selected = 0
-                    # Check if any point (button) is clicked
-                    for point in canvas.points:
-                        if is_point_clicked(point, event.pos):
-                            canvas.selected = point[2]
-                            # print(point[2].to_string())
-
-                    if canvas.selected != 0 and canvas.last_selected != 0:
-                        # players_turn.play(game, selected, last_selected, lines)
-                        connect(game,canvas.selected, canvas.last_selected, canvas)
-                        if(game.check_game_finished()):
-                            canvas.end_screen()
-                        curr_player = (curr_player + 1) % 2
-                        canvas.selected = 0
-                        canvas.last_selected = 0
-                    elif canvas.selected == 0:
-                        canvas.last_selected = 0
-            """
-
+      
     pygame.quit()
     sys.exit()
 if __name__ == "__main__":
