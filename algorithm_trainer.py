@@ -1,7 +1,6 @@
 from algorithm2 import Trainer, Step, Agent
 from easier_hexagon import Game
 from easier_hexagon import Player
-from multiprocessing import Pool
 
 
 # Constants
@@ -33,7 +32,7 @@ def main():
 
     curr_player = 0
     i = 0
-    iterations = 1000
+    iterations = 10000
     while iterations != 0:            # connect(game,node1, node2, canvas)
         
         trainer.step()

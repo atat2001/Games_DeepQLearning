@@ -34,6 +34,7 @@ class Game:
         self.players = []
         self.moves = self.init_moves()
         self.moves_idf = self._init_moves_idf()
+        self.score = []
 
     def __init__(self, size, player1, player2):
         self.nodes_idf_dict = dict()
@@ -47,7 +48,10 @@ class Game:
         self.moves_idf = self._init_moves_idf()
         self.add_player(player1)
         self.add_player(player2)
+        self.score = []
 
+    def setScore(self, score):
+        self.score = score
 
     def init_moves(self):
         moves = [[],[],[]]

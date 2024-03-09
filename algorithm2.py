@@ -11,6 +11,7 @@ class Step:
         self.agent_index = agent_index
         self.reward = None
         self.next_state = next_state
+        
 
 class State:
     def __init__(self):
@@ -38,7 +39,7 @@ class State:
 
 class Agent:
     # def __init__(self,input_shape1, input_shape2,num_actions):
-    def __init__(self, state_shape1, state_shape2, num_actions, learning_rate=0.001, discount_factor=0.99):
+    def __init__(self, state_shape1, state_shape2, num_actions, learning_rate=0.001, discount_factor=0.99, load_weights = True):
         self.state_shape1 = state_shape1
         self.state_shape2 = state_shape2
         self.num_actions = num_actions
@@ -48,12 +49,14 @@ class Agent:
         # Define the Q-network
         self.q_network = self._build_q_network()
         self.human_input = False
+        self.training_file = "final_reward_weights_backup.h5"
 
         # Compile the Q-network
         self.q_network.compile(optimizer=tf.keras.optimizers.Adam(learning_rate=self.learning_rate),
                                loss='mean_squared_error')
-
-        self.load_weights()
+        self.will_learn = load_weights
+        if(load_weights):
+            self.load_weights()
 
     def _build_q_network(self):
         # Input layers for each matrix
@@ -90,6 +93,8 @@ class Agent:
 
     # step list -> batch
     def train(self, batch):
+        if(not(self.will_learn)):
+            return
         # Extract data from the batch
         # print([step.reward for step in batch])
         # exit()
@@ -115,26 +120,31 @@ class Agent:
         self.q_network.fit([batch_states1, batch_states2], current_q_values, verbose=0)
 
     def load_weights(self):
+        if(not(self.load_weights)):
+            return
         try:
-            string = "final_reward_weights.h5"
+            string = self.training_file
             self.q_network.load_weights(string)
             print("loaded weights")
         except Exception as e:
             print("Error:", e)
 
     def save_weights(self):
+        if(not(self.load_weights)):
+            return
         try:
-            string = "final_reward_weights.h5"
+            string = self.training_file
             self.q_network.save_weights(string)
             print("saved weights")
         except Exception as e:
             print("Error:", e)
     
-
+    def set_training_file(self, file):
+        self.training_file = file
 
 
 class Trainer:
-    def __init__(self, input_shape, agents, game):
+    def __init__(self, input_shape, agents, game, player1_name = "player1", player2_name = "player2"):
         self.input_shape = input_shape       # set this now
         self.step_list = []    #   [(cur_state, move_selected, moves instant reward, agent_index,)]
         self.agents = agents
@@ -144,11 +154,14 @@ class Trainer:
         self.cur_state = State()._init_state(self.game, self.input_shape)
         self.actions = game.get_moves_idf() # change to general
         self.filter = []
-        self.batch_size = game.get_number_of_moves()*5 + 1     # aumentar com o tempo
+        self.batch_size = game.get_number_of_moves()*10 + 1     # aumentar com o tempo
         self.batch_index = 0
         self.save = 0
         self.cur_game = []
         self.last_scores = []
+        self.player1_name = player1_name
+        self.player2_name = player2_name
+        self.last_score = []
         # set the agent_index for the agents
         """
         for a_index in range(len(agents)):
@@ -156,7 +169,7 @@ class Trainer:
         """
     def reset_game(self):
         del self.game
-        self.game = Game(3, Player("player1"), Player("player2"))
+        self.game = Game(3, Player(self.player1_name), Player(self.player2_name))
         self.filter = []
         self.cur_state = State()._init_state(self.game, self.input_shape)
         # self.step_liststep_list = [] 
@@ -202,6 +215,7 @@ class Trainer:
         if(self.game.check_game_finished()):
             self.init_rewards_in_step_list()
             self.cur_game = []
+            self.last_score = self.game.score
             self.reset_game()
             print(self.measure_accuracy())
         # [(cur_state, move_selected, moves_instant_reward, agent_index,)]
@@ -238,6 +252,7 @@ class Trainer:
         whole_score[0] = scores[0] - scores[1]  # simplified for 2, for more could be my_score-max_score
         whole_score[1] = scores[1] - scores[0]
         self.last_scores = self.last_scores + [[scores[0], scores[1]],]
+        self.game.setScore([scores[0], scores[1]])
         cur_score = [0,0]
         for step in self.cur_game:
             cur_score[step.agent_index] += step.moves_instant_reward

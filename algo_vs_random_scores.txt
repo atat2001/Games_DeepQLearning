@@ -1,0 +1,23 @@
+if playing second move it is 3% better than random moves
+
+
+overall diff: 
+-496.0
+
+average diff:
+-0.030624845640898988
+0.5625
+[21.0, 3.0]
+
+More trained got this diff: 
+18.0
+
+overall diff: 
+-478.0
+
+average diff:
+-0.02943893576399581
+
+
+
+
