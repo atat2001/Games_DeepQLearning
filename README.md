@@ -14,6 +14,8 @@ I havent trained the model enought to know if it is getting better.
 I belive for this reward function to work (since it thinks in the long term) it would require a way bigger training set, so dont expect the algorithm to play well...
 
 
+
+
 easier_hexagon  -> has the game implementation
 algorithm_frontend.py -> lets you play the game vs another player or vs the Ai if we change a few lines
 
