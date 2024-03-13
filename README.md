@@ -14,7 +14,7 @@ I havent trained the model enought to know if it is getting better.
 I belive for this reward function to work (since it thinks in the long term) it would require a way bigger training set, so dont expect the algorithm to play well...
 
 
-Files of interest:
+Files of interest (Todo: change the names to something easier to understand and cleanup the code):
 
 easier_hexagon  -> has the game implementation
 
