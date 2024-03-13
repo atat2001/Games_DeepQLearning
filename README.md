@@ -26,5 +26,7 @@ algo_vs_old_algo -> algorithm plays with a untrained version
 
 algorithm_trainer -> trains the Ai using algorithm2
 
+Other files: Ai weights, data from model...
+
 
 
